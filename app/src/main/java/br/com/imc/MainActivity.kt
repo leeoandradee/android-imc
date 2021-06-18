@@ -29,7 +29,20 @@ class MainActivity : AppCompatActivity() {
         footer.visibility = View.GONE
 
         btnCalcular.setOnClickListener {
-            if (inputPeso.text.toString() != "" && inputAltura.text.toString() != "" ) {
+
+            limparResultado()
+
+            if (inputPeso.text.toString().toDouble() == 0.0) {
+                inputPeso.error = "Informe o peso"
+                Toast.makeText(this, "Favor informar o peso", Toast.LENGTH_SHORT).show()
+            }
+
+            if (inputAltura.text.toString().toDouble() == 0.0) {
+                inputAltura.error = "Informe a altura"
+                Toast.makeText(this, "Favor informar o altura", Toast.LENGTH_SHORT).show()
+            }
+
+            if (inputPeso.text.toString().toDouble() != 0.0 && inputAltura.text.toString().toDouble() != 0.0 ) {
                 inputAltura.onEditorAction(EditorInfo.IME_ACTION_DONE)
                 calcular()
             }
@@ -37,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calcular() {
+
         val peso = inputPeso.text.toString().toDouble()
         val altura = inputAltura.text.toString().toDouble()
 
@@ -51,6 +65,8 @@ class MainActivity : AppCompatActivity() {
             else -> calculateClassification(imc, R.drawable.fem_extremo_obeso, R.string.obesidade_grau_iii)
 
         }
+
+        novoCalculo()
     }
 
     private fun calculateClassification(imc: Double, drawbleId: Int, stringId: Int ) {
@@ -61,6 +77,17 @@ class MainActivity : AppCompatActivity() {
         imcPeso.text = getString(stringId)
 
         footer.visibility = View.VISIBLE
+    }
+
+    private fun novoCalculo() {
+        inputPeso.setText("0")
+        inputAltura.setText("0")
+    }
+
+    private fun limparResultado() {
+        imcPeso.text = ""
+        imcIndice.text = ""
+        imcImage.setImageResource(0)
     }
 
     private fun setUpView() {
